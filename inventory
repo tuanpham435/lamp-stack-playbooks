@@ -1,4 +1,4 @@
 [db_servers]
-lamp-db ansible_host=52.88.111.118 mysqlservice=mysqld mysql_port=3306 dbname=ecomdb dbuser=ecomuser dbpassword=ecompassword
+lamp-db ansible_host=35.166.177.72 mysqlservice=mysqld mysql_port=3306 dbname=ecomdb dbuser=ecomuser dbpassword=ecompassword
 [web_servers]
-lamp-web ansible_host=35.89.183.226 httpd_port=80 repository=https://github.com/kodekloudhub/learning-app-ecommerce.git
+lamp-web ansible_host=52.37.88.163 httpd_port=80 repository=https://github.com/kodekloudhub/learning-app-ecommerce.git
