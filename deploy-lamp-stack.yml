@@ -24,7 +24,7 @@
         state: installed
 
     - name: Create Mysql configuration file
-      copy: src=files/my.cnf dest=/etc/my.cnf
+      template: src=my.cnf.j2 dest=/etc/my.cnf
 
     - name: Start MariaDB Service
       service: name=mariadb state=started enabled=yes
@@ -47,12 +47,12 @@
         name: "{{ dbuser }}"
         password: "{{ dbpassword }}" 
         priv: '*.*:ALL'
-        host: '52.37.88.163'
+        host: "{{ hostvars['lampweb']['ansible_facts']['eth0']['ipv4']['address'] }}"
         state: present
       
     - name: Move db-load-script to db host
-      copy:
-        src: files/db-load-script.sql
+      template:
+        src: db-load-script.sql.j2
         dest: /tmp/db-load-script.sql
 
     - name: Load Inventory Data
@@ -99,4 +99,4 @@
       git: repo={{ repository }} dest=/var/www/html force=yes
 
     - name: Creates the index.php file
-      copy: src=files/index.php dest=/var/www/html/index.php
+      template: src=index.php.j2 dest=/var/www/html/index.php

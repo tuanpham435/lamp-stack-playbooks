@@ -104,7 +104,10 @@
             <div class="row it_works">
               <?php
 
-                        $link = mysqli_connect('35.166.177.72', 'ecomuser', 'ecompassword', 'ecomdb');
+                        $link = mysqli_connect("{{ hostvars['lamp-db']['ansible_facts']['eth0']['ipv4']['address'] }}", 
+                        "{{ hostvars['lamp-db']['dbuser'] }}", 
+                        "{{ hostvars['lamp-db']['dbpassword'] }}", 
+                        "{{ hostvars['lamp-db']['dbname'] }}");
 
                         if ($link) {
                         $res = mysqli_query($link, "select * from products;");
