@@ -47,7 +47,7 @@
         name: "{{ dbuser }}"
         password: "{{ dbpassword }}" 
         priv: '*.*:ALL'
-        host: 'localhost' 
+        host: '52.37.88.163'
         state: present
       
     - name: Move db-load-script to db host
@@ -79,6 +79,12 @@
     - name: insert firewalld rule for httpd
       firewalld: port={{ httpd_port }}/tcp permanent=true state=enabled immediate=yes
 
+    - name: Allow Apache to connect to MySQL
+      seboolean:
+        name: httpd_can_network_connect_db
+        state: yes
+        persistent: yes
+
     - name: Set index.php as the default page
       tags: "Set index.php as the default page"
       replace:
@@ -88,3 +94,9 @@
 
     - name: http service state
       service: name=httpd state=started enabled=yes
+
+    - name: Copy the code from repository
+      git: repo={{ repository }} dest=/var/www/html force=yes
+
+    - name: Creates the index.php file
+      copy: src=files/index.php dest=/var/www/html/index.php
