@@ -47,7 +47,7 @@
         name: "{{ dbuser }}"
         password: "{{ dbpassword }}" 
         priv: '*.*:ALL'
-        host: "{{ hostvars['lampweb']['ansible_facts']['eth0']['ipv4']['address'] }}"
+        host: "{{ hostvars['lamp-web']['ansible_facts']['eth0']['ipv4']['address'] }}"
         state: present
       
     - name: Move db-load-script to db host
