@@ -1,5 +1,6 @@
+---
 - name: Install common dependencies
-  yum:
+  ansible.builtin.yum:
     name:
       - python3-libselinux
       - python3-libsemanage
