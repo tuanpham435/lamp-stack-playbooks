@@ -1,5 +1,6 @@
+---
 - name: Install httpd and php
-  yum:
+  ansible.builtin.yum:
     name:
       - httpd
       - php
@@ -7,32 +8,49 @@
     state: present
 
 - name: Install web role specific dependencies
-  yum: name=git state=installed
+  ansible.builtin.yum:
+    name: git
+    state: installed
 
 - name: Start firewalld
-  service: name=firewalld state=started enabled=yes
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: true
 
 - name: insert firewalld rule for httpd
-  firewalld: port={{ httpd_port }}/tcp permanent=true state=enabled immediate=yes
+  ansible.posix.firewalld:
+    port: "{{ httpd_port }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
 
 - name: Allow Apache to connect to MySQL
-  seboolean:
+  ansible.posix.seboolean:
     name: httpd_can_network_connect_db
-    state: yes
-    persistent: yes
+    state: true
+    persistent: true
 
 - name: Set index.php as the default page
-  tags: "Set index.php as the default page"
-  replace:
+  tags: Set index.php as the default page
+  ansible.builtin.replace:
     path: /etc/httpd/conf/httpd.conf
-    regexp: "DirectoryIndex index.html"
-    replace: "DirectoryIndex index.php"
+    regexp: DirectoryIndex index.html
+    replace: DirectoryIndex index.php
 
 - name: http service state
-  service: name=httpd state=started enabled=yes
+  ansible.builtin.service:
+    name: httpd
+    state: started
+    enabled: true
 
 - name: Copy the code from repository
-  git: repo={{ repository }} dest=/var/www/html force=yes
+  ansible.builtin.git:
+    repo: "{{ repository }}"
+    dest: /var/www/html
+    force: true
 
 - name: Creates the index.php file
-  template: src=index.php.j2 dest=/var/www/html/index.php
+  ansible.builtin.template:
+    src: index.php.j2
+    dest: /var/www/html/index.php
